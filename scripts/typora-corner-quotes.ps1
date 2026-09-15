@@ -258,6 +258,15 @@ public static class TyporaCornerQuotesHook
             try
             {
                 object data = source.GetData(format, false);
+                if (string.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
+                {
+                    // .NET decodes "HTML Format" with the system ANSI code page on
+                    // read, so the object returned above is already mojibake for
+                    // non-ASCII content. Read the raw CF_HTML bytes directly from
+                    // the clipboard and keep them as a UTF-8 stream instead.
+                    string rawHtml = ReadRawClipboardHtmlText();
+                    data = rawHtml != null ? (object)WrapClipboardHtmlUtf8(rawHtml) : null;
+                }
                 if (data != null)
                     snapshot.SetData(format, false, data);
             }
@@ -281,12 +290,21 @@ public static class TyporaCornerQuotesHook
                 try
                 {
                     object data = source.GetData(format, false);
-                    if (data is string)
+                    if (string.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
+                    {
+                        // CF_HTML must stay UTF-8. Writing a .NET string back to the
+                        // "HTML Format" clipboard format re-encodes it with the system
+                        // ANSI code page, which corrupts every non-ASCII character for
+                        // Chromium-based readers such as Typora. Round-trip through an
+                        // explicit UTF-8 byte stream instead.
+                        string htmlText = ReadClipboardHtmlText(data);
+                        if (htmlText != null)
+                            data = WrapClipboardHtmlUtf8(ConvertChineseQuotesInHtml(htmlText));
+                    }
+                    else if (data is string)
                     {
                         string stringData = (string)data;
-                        if (string.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
-                            data = ConvertChineseQuotesInHtml(stringData);
-                        else if (string.Equals(format, DataFormats.UnicodeText, StringComparison.OrdinalIgnoreCase) ||
+                        if (string.Equals(format, DataFormats.UnicodeText, StringComparison.OrdinalIgnoreCase) ||
                                  string.Equals(format, DataFormats.Text, StringComparison.OrdinalIgnoreCase) ||
                                  string.Equals(format, DataFormats.OemText, StringComparison.OrdinalIgnoreCase) ||
                                  string.Equals(format, DataFormats.StringFormat, StringComparison.OrdinalIgnoreCase))
@@ -306,6 +324,34 @@ public static class TyporaCornerQuotesHook
 
         converted.SetData(DataFormats.UnicodeText, true, convertedUnicodeText);
         return converted;
+    }
+
+    private static string ReadClipboardHtmlText(object data)
+    {
+        if (data is string)
+            return (string)data;
+        System.IO.Stream stream = data as System.IO.Stream;
+        if (stream == null)
+            return null;
+        try
+        {
+            if (stream.CanSeek)
+                stream.Seek(0, System.IO.SeekOrigin.Begin);
+            System.IO.MemoryStream copy = new System.IO.MemoryStream();
+            stream.CopyTo(copy);
+            if (stream.CanSeek)
+                stream.Seek(0, System.IO.SeekOrigin.Begin);
+            return Encoding.UTF8.GetString(copy.ToArray());
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static System.IO.MemoryStream WrapClipboardHtmlUtf8(string html)
+    {
+        return new System.IO.MemoryStream(Encoding.UTF8.GetBytes(html ?? string.Empty));
     }
 
     private static string ConvertChineseQuotesInHtml(string html)
@@ -647,6 +693,61 @@ public static class TyporaCornerQuotesHook
 
     [DllImport("user32.dll", SetLastError = true)]
     private static extern uint SendInput(uint inputCount, INPUT[] inputs, int inputSize);
+
+    private static string ReadRawClipboardHtmlText()
+    {
+        uint format = RegisterClipboardFormat(DataFormats.Html);
+        if (format == 0 || !OpenClipboard(IntPtr.Zero))
+            return null;
+        try
+        {
+            IntPtr handle = GetClipboardData(format);
+            if (handle == IntPtr.Zero)
+                return null;
+            IntPtr pointer = GlobalLock(handle);
+            if (pointer == IntPtr.Zero)
+                return null;
+            try
+            {
+                int size = (int)GlobalSize(handle);
+                byte[] bytes = new byte[size];
+                Marshal.Copy(pointer, bytes, 0, size);
+                int length = size;
+                while (length > 0 && bytes[length - 1] == 0)
+                    length--;
+                return Encoding.UTF8.GetString(bytes, 0, length);
+            }
+            finally
+            {
+                GlobalUnlock(handle);
+            }
+        }
+        finally
+        {
+            CloseClipboard();
+        }
+    }
+
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern bool OpenClipboard(IntPtr hWndNewOwner);
+
+    [DllImport("user32.dll")]
+    private static extern bool CloseClipboard();
+
+    [DllImport("user32.dll")]
+    private static extern IntPtr GetClipboardData(uint uFormat);
+
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+    private static extern uint RegisterClipboardFormat(string lpszFormat);
+
+    [DllImport("kernel32.dll")]
+    private static extern IntPtr GlobalLock(IntPtr hMem);
+
+    [DllImport("kernel32.dll")]
+    private static extern bool GlobalUnlock(IntPtr hMem);
+
+    [DllImport("kernel32.dll")]
+    private static extern UIntPtr GlobalSize(IntPtr hMem);
 
     [DllImport("user32.dll")]
     private static extern uint GetClipboardSequenceNumber();

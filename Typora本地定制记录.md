@@ -380,3 +380,13 @@ Mermaid 注入只在本机 Typora 内生效，不改变 Markdown 中的标准代
 - `sequenceDiagram`：保留 Typora 原生 Mermaid。
 - 长 `flowchart LR` 超过 1400 个 SVG 单位时自动分层换行，相邻行反向排列；返工节点进入判断节点上下车道，不占主流程层高，同一决策的多个返工节点会自动堆叠。
 - 100 次 WASM 复杂图烟测：平均 0.177 ms/次（不含首次 Worker 启动）。
+
+## 13. 粘贴乱码根因与剪贴板修复（2026-09-15）
+
+现象：从 AI 桌面应用复制表格粘贴到 Typora 后，单元格末尾汉字变成 `�?/td>` 之类的乱码。
+
+根因：中文引号服务（`typora-corner-quotes.ps1`，运行于 Windows PowerShell 5.1）在粘贴时会重写剪贴板。而 .NET Framework 读写 `HTML Format`（CF_HTML）剪贴板格式时使用系统 ANSI 代码页（GBK），并非 CF_HTML 规范要求的 UTF-8：读入时中文先变成 GBK 错解字符串，写回时再按 GBK 编码，Chromium 内核的 Typora 按 UTF-8 解析后产生大量 U+FFFD，且头部字节偏移与内容错位，于是露出半截 `</td>` 标签。
+
+修复：脚本内 HTML 格式的读取改为 Win32 `OpenClipboard`/`GetClipboardData` 直取原始字节并按 UTF-8 解码；写回时改用 `MemoryStream` 承载 UTF-8 字节，完全绕开 .NET 对该格式的 ANSI 转码。粘贴时快照与粘贴后还原两条路径均已覆盖。
+
+验证：端到端测试在真实剪贴板上完成——转换后粘贴内容与快照还原内容均字节级完整（48 个 `</td>`、无 U+FFFD、偏移有效、引号转换与还原均正确）。该缺陷自 2026-08-05 引号服务上线即存在，仅影响含弯引号的富文本（HTML）粘贴。
