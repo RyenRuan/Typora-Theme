@@ -4,4 +4,4 @@
 *.ttf binary
 *.wasm binary
 *.png binary
-
+Typora[[:space:]]1.9.5/Typora.exe filter=lfs diff=lfs merge=lfs -text

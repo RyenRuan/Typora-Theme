@@ -1,0 +1,945 @@
+:root {
+    --side-bar-bg-color: #fafafa;
+    --control-text-color: #777;
+}
+
+@include-when-export url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext);
+
+/* open-sans-regular - latin-ext_latin */
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Open Sans Regular'), local('OpenSans-Regular'), url('./github/open-sans-v17-latin-ext_latin-regular.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD, U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  /* open-sans-italic - latin-ext_latin */
+  @font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: normal;
+    src: local('Open Sans Italic'), local('OpenSans-Italic'), url('./github/open-sans-v17-latin-ext_latin-italic.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD, U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  /* open-sans-700 - latin-ext_latin */
+  @font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: bold;
+    src: local('Open Sans Bold'), local('OpenSans-Bold'), url('./github/open-sans-v17-latin-ext_latin-700.woff2') format('woff2'); 
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD, U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  /* open-sans-700italic - latin-ext_latin */
+  @font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: bold;
+    src: local('Open Sans Bold Italic'), local('OpenSans-BoldItalic'), url('./github/open-sans-v17-latin-ext_latin-700italic.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD, U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    font-family: "Open Sans","Clear Sans", "Helvetica Neue", Helvetica, Arial, 'Segoe UI Emoji', sans-serif;
+    color: rgb(51, 51, 51);
+    line-height: 1.6;
+}
+
+#write {
+    max-width: 860px;
+  	margin: 0 auto;
+  	padding: 30px;
+    padding-bottom: 100px;
+}
+
+@media only screen and (min-width: 1400px) {
+	#write {
+		max-width: 1024px;
+	}
+}
+
+@media only screen and (min-width: 1800px) {
+	#write {
+		max-width: 1200px;
+	}
+}
+
+#write > ul:first-child,
+#write > ol:first-child{
+    margin-top: 30px;
+}
+
+a {
+    color: #4183C4;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    position: relative;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    line-height: 1.4;
+    cursor: text;
+}
+h1:hover a.anchor,
+h2:hover a.anchor,
+h3:hover a.anchor,
+h4:hover a.anchor,
+h5:hover a.anchor,
+h6:hover a.anchor {
+    text-decoration: none;
+}
+h1 tt,
+h1 code {
+    font-size: inherit;
+}
+h2 tt,
+h2 code {
+    font-size: inherit;
+}
+h3 tt,
+h3 code {
+    font-size: inherit;
+}
+h4 tt,
+h4 code {
+    font-size: inherit;
+}
+h5 tt,
+h5 code {
+    font-size: inherit;
+}
+h6 tt,
+h6 code {
+    font-size: inherit;
+}
+h1 {
+    font-size: 2.25em;
+    line-height: 1.2;
+    border-bottom: 1px solid #eee;
+}
+h2 {
+    font-size: 1.75em;
+    line-height: 1.225;
+    border-bottom: 1px solid #eee;
+}
+
+/*@media print {
+    .typora-export h1,
+    .typora-export h2 {
+        border-bottom: none;
+        padding-bottom: initial;
+    }
+
+    .typora-export h1::after,
+    .typora-export h2::after {
+        content: "";
+        display: block;
+        height: 100px;
+        margin-top: -96px;
+        border-top: 1px solid #eee;
+    }
+}*/
+
+h3 {
+    font-size: 1.5em;
+    line-height: 1.43;
+}
+h4 {
+    font-size: 1.25em;
+}
+h5 {
+    font-size: 1em;
+}
+h6 {
+   font-size: 1em;
+    color: #777;
+}
+p,
+blockquote,
+ul,
+ol,
+dl,
+table{
+    margin: 0.8em 0;
+}
+li>ol,
+li>ul {
+    margin: 0 0;
+}
+hr {
+    height: 2px;
+    padding: 0;
+    margin: 16px 0;
+    background-color: #e7e7e7;
+    border: 0 none;
+    overflow: hidden;
+    box-sizing: content-box;
+}
+
+li p.first {
+    display: inline-block;
+}
+ul,
+ol {
+    padding-left: 30px;
+}
+ul:first-child,
+ol:first-child {
+    margin-top: 0;
+}
+ul:last-child,
+ol:last-child {
+    margin-bottom: 0;
+}
+blockquote {
+    border-left: 4px solid #dfe2e5;
+    padding: 0 15px;
+    color: #777777;
+}
+blockquote blockquote {
+    padding-right: 0;
+}
+table {
+    padding: 0;
+    word-break: initial;
+}
+table tr {
+    border: 1px solid #dfe2e5;
+    margin: 0;
+    padding: 0;
+}
+table tr:nth-child(2n),
+thead {
+    background-color: #f8f8f8;
+}
+table th {
+    font-weight: bold;
+    border: 1px solid #dfe2e5;
+    border-bottom: 0;
+    margin: 0;
+    padding: 6px 13px;
+}
+table td {
+    border: 1px solid #dfe2e5;
+    margin: 0;
+    padding: 6px 13px;
+}
+table th:first-child,
+table td:first-child {
+    margin-top: 0;
+}
+table th:last-child,
+table td:last-child {
+    margin-bottom: 0;
+}
+
+.CodeMirror-lines {
+    padding-left: 4px;
+}
+
+.code-tooltip {
+    box-shadow: 0 1px 1px 0 rgba(0,28,36,.3);
+    border-top: 1px solid #eef2f2;
+}
+
+.md-fences,
+code,
+tt {
+    border: 1px solid #e7eaed;
+    background-color: #f8f8f8;
+    border-radius: 3px;
+    padding: 0;
+    padding: 2px 4px 0px 4px;
+    font-size: 0.9em;
+}
+
+code {
+    background-color: #f3f4f4;
+    padding: 0 2px 0 2px;
+}
+
+.md-fences {
+    margin-bottom: 15px;
+    margin-top: 15px;
+    padding-top: 8px;
+    padding-bottom: 6px;
+}
+
+
+.md-task-list-item > input {
+  margin-left: -1.3em;
+}
+
+@media print {
+    html {
+        font-size: 13px;
+    }
+    pre {
+        page-break-inside: avoid;
+        word-wrap: break-word;
+    }
+}
+
+.md-fences {
+	background-color: #f8f8f8;
+}
+#write pre.md-meta-block {
+	padding: 1rem;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: #f7f7f7;
+    border: 0;
+    border-radius: 3px;
+    color: #777777;
+    margin-top: 0 !important;
+}
+
+.mathjax-block>.code-tooltip {
+	bottom: .375rem;
+}
+
+.md-mathjax-midline {
+    background: #fafafa;
+}
+
+#write>h3.md-focus:before{
+	left: -1.5625rem;
+	top: .375rem;
+}
+#write>h4.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h5.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h6.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+.md-image>.md-meta {
+    /*border: 1px solid #ddd;*/
+    border-radius: 3px;
+    padding: 2px 0px 0px 4px;
+    font-size: 0.9em;
+    color: inherit;
+}
+
+.md-tag {
+    color: #a7a7a7;
+    opacity: 1;
+}
+
+.md-toc { 
+    margin-top:20px;
+    padding-bottom:20px;
+}
+
+.sidebar-tabs {
+    border-bottom: none;
+}
+
+#typora-quick-open {
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+}
+
+#typora-quick-open-item {
+    background-color: #FAFAFA;
+    border-color: #FEFEFE #e5e5e5 #e5e5e5 #eee;
+    border-style: solid;
+    border-width: 1px;
+}
+
+/** focus mode */
+.on-focus-mode blockquote {
+    border-left-color: rgba(85, 85, 85, 0.12);
+}
+
+header, .context-menu, .megamenu-content, footer{
+    font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.file-node-content:hover .file-node-icon,
+.file-node-content:hover .file-node-open-state{
+    visibility: visible;
+}
+
+.mac-seamless-mode #typora-sidebar {
+    background-color: #fafafa;
+    background-color: var(--side-bar-bg-color);
+}
+
+.mac-os #write{
+    caret-color: AccentColor;
+}
+
+.md-lang {
+    color: #b4654d;
+}
+
+/*.html-for-mac {
+    --item-hover-bg-color: #E6F0FE;
+}*/
+
+#md-notification .btn {
+    border: 0;
+}
+
+.dropdown-menu .divider {
+    border-color: #e5e5e5;
+    opacity: 0.4;
+}
+
+.ty-preferences .window-content {
+    background-color: #fafafa;
+}
+
+.ty-preferences .nav-group-item.active {
+    color: white;
+    background: #999;
+}
+
+.menu-item-container a.menu-style-btn {
+    background-color: #f5f8fa;
+    background-image: linear-gradient( 180deg , hsla(0, 0%, 100%, 0.8), hsla(0, 0%, 100%, 0)); 
+}
+/* Ryen custom font override: prefer current consolaslxgw merged font */
+body,
+#write {
+    font-family: "consolaslxgw", "Consolas NF + LXGW WenKai Mono", "LXGW WenKai Mono", "Microsoft YaHei", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "consolaslxgw", "Consolas NF + LXGW WenKai Mono", "LXGW WenKai Mono", "Microsoft YaHei", sans-serif;
+}
+
+.md-fences,
+code,
+tt,
+.CodeMirror,
+.CodeMirror pre {
+    font-family: "consolaslxgw", "Consolas NF + LXGW WenKai Mono", "Cascadia Code", Consolas, "LXGW WenKai Mono", monospace;
+}
+/* Codex compact spacing override */
+body,
+#write {
+    line-height: 1.52;
+}
+
+p,
+#write p,
+#write > p {
+    margin-top: 0.75em;
+    margin-bottom: 0.95em;
+    line-height: 1.52;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 1.05em;
+    margin-bottom: 0.6em;
+    line-height: 1.35;
+}
+
+ul,
+ol {
+    margin-top: 0.7em;
+    margin-bottom: 0.75em;
+}
+
+li {
+    margin-top: 0.28em;
+    margin-bottom: 0.28em;
+}
+
+li > p {
+    margin-top: 0.35em;
+    margin-bottom: 0.45em;
+}
+
+.md-fences,
+pre {
+    margin-top: 0.85em;
+    margin-bottom: 0.85em;
+    line-height: 1.42;
+}
+/* Codex table spacing override */
+#write table,
+table {
+    margin-top: 0.95em;
+    margin-bottom: 1.15em;
+    line-height: 1.55;
+}
+
+#write table th,
+#write table td,
+table th,
+table td {
+    padding: 0.55em 0.85em;
+    line-height: 1.55;
+    vertical-align: top;
+}
+
+#write table th,
+table th {
+    padding-top: 0.65em;
+    padding-bottom: 0.65em;
+}
+/* Codex table all-column alignment override */
+#write table th,
+#write table td,
+table th,
+table td {
+    vertical-align: middle;
+}
+/* Codex adaptive table presentation override */
+#write table,
+table {
+    width: fit-content;
+    max-width: 100%;
+    min-width: min(100%, 36rem);
+    margin-left: auto;
+    margin-right: auto;
+    table-layout: auto;
+}
+
+#write table th,
+#write table td,
+table th,
+table td {
+    overflow-wrap: break-word;
+    word-break: normal;
+}
+
+#write table th:first-child,
+#write table td:first-child,
+table th:first-child,
+table td:first-child {
+    min-width: 5.5em;
+}
+
+#write table:not(:has(tr:first-child > :nth-child(5))) th,
+#write table:not(:has(tr:first-child > :nth-child(5))) td,
+table:not(:has(tr:first-child > :nth-child(5))) th,
+table:not(:has(tr:first-child > :nth-child(5))) td {
+    padding-left: 1.05em;
+    padding-right: 1.05em;
+}
+
+#write table:has(tr:first-child > :nth-child(5)),
+table:has(tr:first-child > :nth-child(5)) {
+    width: 100%;
+    min-width: 100%;
+}
+
+#write table:has(tr:first-child > :nth-child(5)) th,
+#write table:has(tr:first-child > :nth-child(5)) td,
+table:has(tr:first-child > :nth-child(5)) th,
+table:has(tr:first-child > :nth-child(5)) td {
+    padding-left: 0.55em;
+    padding-right: 0.55em;
+    font-size: 0.96em;
+}
+
+#write table:has(tr:first-child > :nth-child(5)) th:first-child,
+#write table:has(tr:first-child > :nth-child(5)) td:first-child,
+table:has(tr:first-child > :nth-child(5)) th:first-child,
+table:has(tr:first-child > :nth-child(5)) td:first-child {
+    min-width: 7em;
+}
+
+/* Ryen wide writing area override */
+#write {
+    width: calc(100% - 96px);
+    max-width: 1400px;
+}
+
+@media only screen and (max-width: 760px) {
+    #write {
+        width: calc(100% - 36px);
+    }
+}
+
+/* Ryen Mermaid universal skin */
+#write pre.md-fences[lang="mermaid"] svg,
+#write pre.md-fences[lang="mermaid"] svg text,
+#write pre.md-fences[lang="mermaid"] svg .label,
+#write pre.md-fences[lang="mermaid"] svg .nodeLabel,
+#write pre.md-fences[lang="mermaid"] svg .edgeLabel {
+    font-family: "consolaslxgw", "LXGW WenKai Mono", "Microsoft YaHei", sans-serif !important;
+}
+
+/* Ryen Mermaid readable scale: keep Typora's native 1rem baseline. */
+#write pre.md-fences[lang="mermaid"] svg text,
+#write pre.md-fences[lang="mermaid"] svg .label,
+#write pre.md-fences[lang="mermaid"] svg .nodeLabel,
+#write pre.md-fences[lang="mermaid"] svg .edgeLabel,
+#write pre.md-fences[lang="mermaid"] svg foreignObject div,
+#write pre.md-fences[lang="mermaid"] svg foreignObject span {
+    font-size: 1rem !important;
+    line-height: 1.25;
+}
+
+#write pre.md-fences[lang="mermaid"] svg text,
+#write pre.md-fences[lang="mermaid"] svg .label,
+#write pre.md-fences[lang="mermaid"] svg .nodeLabel,
+#write pre.md-fences[lang="mermaid"] svg .edgeLabel {
+    color: #1e293b;
+    fill: #1e293b;
+}
+
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] > rect,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] > rect,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] > circle,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] > circle,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] > ellipse,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] > ellipse,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] > polygon,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] > polygon,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] > path,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] > path {
+    fill: #eef6ff !important;
+    stroke: #4f6ef7 !important;
+    stroke-width: 1.8px !important;
+    filter: drop-shadow(0 3px 5px rgba(79, 110, 247, 0.12));
+}
+
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] > rect,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] > rect {
+    rx: 10px;
+    ry: 10px;
+}
+
+#write pre.md-fences[lang="mermaid"] svg .flowchart-link:not([style]),
+#write pre.md-fences[lang="mermaid"] svg .edgePath path.path:not([style]) {
+    stroke: #64748b !important;
+    stroke-width: 1.8px !important;
+}
+
+#write pre.md-fences[lang="mermaid"] svg .edgeLabel rect,
+#write pre.md-fences[lang="mermaid"] svg .labelBkg {
+    fill: #fbfcfe !important;
+    opacity: 0.96 !important;
+    rx: 6px;
+    ry: 6px;
+}
+
+#write pre.md-fences[lang="mermaid"] svg .cluster rect {
+    fill: #f6f8fc !important;
+    stroke: #b7c5d8 !important;
+    stroke-width: 1.4px !important;
+    rx: 12px;
+    ry: 12px;
+}
+
+#write pre.md-fences[lang="mermaid"] svg .actor {
+    fill: #eef6ff !important;
+    stroke: #4f6ef7 !important;
+    stroke-width: 1.6px !important;
+}
+
+#write pre.md-fences[lang="mermaid"] svg .actor-line,
+#write pre.md-fences[lang="mermaid"] svg .messageLine0,
+#write pre.md-fences[lang="mermaid"] svg .messageLine1 {
+    stroke: #64748b !important;
+    stroke-width: 1.5px !important;
+}
+
+#write pre.md-fences[lang="mermaid"] svg .note {
+    fill: #fff7e8 !important;
+    stroke: #e8a23a !important;
+}
+
+/* Ryen Mermaid strong skin.
+   Only target Mermaid's unclassified default nodes so classDef and linkStyle
+   inside a diagram remain authoritative. */
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] > rect,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] > rect,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] > path,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] > path,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] > circle,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] > circle,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] > ellipse,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] > ellipse {
+    fill: #eef6ff !important;
+    stroke: #4f6ef7 !important;
+    stroke-width: 2px !important;
+    filter: drop-shadow(0 3px 5px rgba(79, 110, 247, 0.16));
+}
+
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] > polygon,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] > polygon {
+    fill: #fff4dc !important;
+    stroke: #e5a52d !important;
+    stroke-width: 2px !important;
+    filter: drop-shadow(0 3px 5px rgba(229, 165, 45, 0.16));
+}
+
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] > circle,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] > circle,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] > ellipse,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] > ellipse {
+    fill: #e9f8f1 !important;
+    stroke: #32a879 !important;
+}
+
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] > rect[rx],
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] > rect[rx],
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] > rect[ry],
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] > rect[ry] {
+    rx: 12px;
+    ry: 12px;
+}
+
+#write pre.md-fences[lang="mermaid"] svg .flowchart-link:not([style]),
+#write pre.md-fences[lang="mermaid"] svg .edgePath .path:not([style]),
+#write pre.md-fences[lang="mermaid"] svg .messageLine0,
+#write pre.md-fences[lang="mermaid"] svg .messageLine1 {
+    stroke: #60738e !important;
+    stroke-width: 2px !important;
+}
+
+#write pre.md-fences[lang="mermaid"] svg marker path,
+#write pre.md-fences[lang="mermaid"] svg .arrowheadPath {
+    fill: #60738e !important;
+    stroke: #60738e !important;
+}
+
+#write pre.md-fences[lang="mermaid"] svg .edgeLabel rect,
+#write pre.md-fences[lang="mermaid"] svg .labelBkg {
+    fill: #edf2f8 !important;
+    stroke: #d3deed !important;
+    stroke-width: 1px !important;
+    rx: 6px;
+    ry: 6px;
+}
+
+#write pre.md-fences[lang="mermaid"] svg .edgeLabel foreignObject div,
+#write pre.md-fences[lang="mermaid"] svg .edgeLabel foreignObject span {
+    padding: 2px 6px;
+    border-radius: 6px;
+    background: #edf2f8;
+    color: #334155;
+    font-weight: 600;
+}
+
+#write pre.md-fences[lang="mermaid"] svg .cluster rect {
+    fill: #f3f6fb !important;
+    stroke: #aebed3 !important;
+    stroke-width: 1.6px !important;
+    rx: 14px;
+    ry: 14px;
+}
+
+
+/* Ryen Mermaid C style: soft pastel candy, compact and borderless. */
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] > rect,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] > rect,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] > path,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] > path,
+#write pre.md-fences[lang="mermaid"] svg g.node[class*="ryen-process"] > rect,
+#write pre.md-fences[lang="mermaid"] svg g.node[class*="ryen-process"] > path {
+    fill: #f0edff !important;
+    stroke: #7567d8 !important;
+    stroke-width: 2px !important;
+    filter: drop-shadow(0 4px 7px rgba(117, 103, 216, 0.18));
+}
+
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] > polygon,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] > polygon,
+#write pre.md-fences[lang="mermaid"] svg g.node[class*="ryen-decision"] > polygon {
+    fill: #fff1d9 !important;
+    stroke: #e5a52d !important;
+    stroke-width: 2px !important;
+    filter: drop-shadow(0 4px 7px rgba(229, 165, 45, 0.16));
+}
+
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] > circle,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] > circle,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] > ellipse,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] > ellipse {
+    fill: #eaf8f1 !important;
+    stroke: #32a879 !important;
+    stroke-width: 2px !important;
+    filter: drop-shadow(0 4px 7px rgba(50, 168, 121, 0.16));
+}
+
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] > rect[rx],
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] > rect[rx],
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] > rect[ry],
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] > rect[ry] {
+    rx: 18px;
+    ry: 18px;
+}
+
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] .label,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] .label,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] .nodeLabel,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] .nodeLabel,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] foreignObject div,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] foreignObject div,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] foreignObject span,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] foreignObject span,
+#write pre.md-fences[lang="mermaid"] svg g.node[class*="ryen-process"] .label,
+#write pre.md-fences[lang="mermaid"] svg g.node[class*="ryen-process"] .nodeLabel,
+#write pre.md-fences[lang="mermaid"] svg g.node[class*="ryen-process"] foreignObject div,
+#write pre.md-fences[lang="mermaid"] svg g.node[class*="ryen-process"] foreignObject span,
+#write pre.md-fences[lang="mermaid"] svg g.node[class*="ryen-decision"] .label,
+#write pre.md-fences[lang="mermaid"] svg g.node[class*="ryen-decision"] .nodeLabel,
+#write pre.md-fences[lang="mermaid"] svg g.node[class*="ryen-decision"] foreignObject div,
+#write pre.md-fences[lang="mermaid"] svg g.node[class*="ryen-decision"] foreignObject span {
+    color: #2d2858 !important;
+    fill: #2d2858 !important;
+}
+
+#write pre.md-fences[lang="mermaid"] svg .flowchart-link:not([style]),
+#write pre.md-fences[lang="mermaid"] svg .edgePath path.path:not([style]) {
+    stroke: #8a78cf !important;
+    stroke-width: 2px !important;
+}
+
+#write pre.md-fences[lang="mermaid"] svg marker path,
+#write pre.md-fences[lang="mermaid"] svg .arrowheadPath {
+    fill: #8a78cf !important;
+    stroke: #8a78cf !important;
+}
+
+#write pre.md-fences[lang="mermaid"] svg .edgeLabel rect,
+#write pre.md-fences[lang="mermaid"] svg .labelBkg {
+    fill: #f4f0ff !important;
+    stroke: #d8d0f3 !important;
+}
+
+#write pre.md-fences[lang="mermaid"] svg .edgeLabel foreignObject div,
+#write pre.md-fences[lang="mermaid"] svg .edgeLabel foreignObject span {
+    background: #f4f0ff;
+    color: #51448e;
+}
+
+#write pre.md-fences[lang="mermaid"] svg .cluster rect {
+    fill: #faf7ff !important;
+    stroke: #b5a9ee !important;
+    stroke-width: 1.5px !important;
+    rx: 16px;
+    ry: 16px;
+}
+
+#write pre.md-fences[lang="mermaid"] svg .cluster-label,
+#write pre.md-fences[lang="mermaid"] svg .cluster-label .nodeLabel,
+#write pre.md-fences[lang="mermaid"] svg .cluster-label foreignObject div,
+#write pre.md-fences[lang="mermaid"] svg .cluster-label foreignObject span {
+    color: #51448e !important;
+    fill: #51448e !important;
+}
+
+
+/* Ryen Mermaid C fidelity override.
+   Mermaid controls graph layout; this block supplies the selected C visual language. */
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] > rect,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] > rect,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] > path,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] > path {
+    fill: #f2edff !important;
+    stroke: #8b5cf6 !important;
+    stroke-width: 2px !important;
+    rx: 22px;
+    ry: 22px;
+    filter: drop-shadow(0 5px 9px rgba(139, 92, 246, 0.16));
+}
+
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] > polygon,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] > polygon {
+    fill: #fff1d6 !important;
+    stroke: #f07818 !important;
+    stroke-width: 2px !important;
+    filter: drop-shadow(0 5px 9px rgba(240, 120, 24, 0.15));
+}
+
+#write pre.md-fences[lang="mermaid"] svg g.node[class*="ryen-success"] > rect {
+    fill: #e9f8f0 !important;
+    stroke: #2fb879 !important;
+    stroke-width: 2px !important;
+    filter: drop-shadow(0 5px 9px rgba(47, 184, 121, 0.15));
+}
+
+#write pre.md-fences[lang="mermaid"] svg g.node[class*="ryen-rework"] > rect {
+    fill: #fff0e7 !important;
+    stroke: #f07818 !important;
+    stroke-width: 2px !important;
+    filter: drop-shadow(0 4px 8px rgba(240, 120, 24, 0.14));
+}
+
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] .label,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] .label,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] .nodeLabel,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] .nodeLabel,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] foreignObject div,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] foreignObject div,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="node default"] foreignObject span,
+#write pre.md-fences[lang="mermaid"] svg g.node[class="default node"] foreignObject span {
+    color: #2d2858;
+    fill: #2d2858;
+    font-weight: 500;
+}
+
+#write pre.md-fences[lang="mermaid"] svg g.node[class*="ryen-rework"] .label,
+#write pre.md-fences[lang="mermaid"] svg g.node[class*="ryen-rework"] .nodeLabel,
+#write pre.md-fences[lang="mermaid"] svg g.node[class*="ryen-rework"] foreignObject div,
+#write pre.md-fences[lang="mermaid"] svg g.node[class*="ryen-rework"] foreignObject span {
+    color: #713311 !important;
+    fill: #713311 !important;
+}
+
+#write pre.md-fences[lang="mermaid"] svg .flowchart-link,
+#write pre.md-fences[lang="mermaid"] svg .edgePath path.path {
+    stroke: #9b72d0 !important;
+    stroke-width: 2.2px !important;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+#write pre.md-fences[lang="mermaid"] svg marker path,
+#write pre.md-fences[lang="mermaid"] svg .arrowheadPath {
+    fill: #9b72d0 !important;
+    stroke: #9b72d0 !important;
+}
+
+#write pre.md-fences[lang="mermaid"] svg .edgeLabel rect,
+#write pre.md-fences[lang="mermaid"] svg .labelBkg {
+    fill: #f6f2ff !important;
+    stroke: #ded5f4 !important;
+}
+
+#write pre.md-fences[lang="mermaid"] svg .edgeLabel foreignObject div,
+#write pre.md-fences[lang="mermaid"] svg .edgeLabel foreignObject span {
+    background: #f6f2ff !important;
+    color: #51448e !important;
+    border-radius: 8px;
+}
+
+#write pre.md-fences[lang="mermaid"] svg .cluster rect {
+    fill: #faf7ff !important;
+    stroke: #b5a0e2 !important;
+    stroke-width: 1.6px !important;
+    rx: 28px;
+    ry: 28px;
+}
+
+#write pre.md-fences[lang="mermaid"] svg .cluster-label,
+#write pre.md-fences[lang="mermaid"] svg .cluster-label .nodeLabel,
+#write pre.md-fences[lang="mermaid"] svg .cluster-label foreignObject div,
+#write pre.md-fences[lang="mermaid"] svg .cluster-label foreignObject span {
+    color: #51448e !important;
+    fill: #51448e !important;
+    font-weight: 600;
+}

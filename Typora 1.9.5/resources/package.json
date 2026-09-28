@@ -1,0 +1,12 @@
+{
+    "name": "Typora",
+    "version": "1.9.5",
+    "main": "main.node",
+    "family": "abnerworks",
+    "type": "commonjs",
+    "private": true,
+    "author": "typora.io",
+    "homepage": "https://typora.io",
+    "concat": "hi@typora.io",
+    "releaseId": "b20995f3"
+}

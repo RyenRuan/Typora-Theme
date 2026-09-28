@@ -1,0 +1,17 @@
+# Ryen Mermaid 检查点
+
+- 创建时间：2026-08-24 15:13:05（Asia/Shanghai）
+- 状态：修改布局、回路路由和图表容器之前的可显示版本
+- 工程快照：`project/`
+- Typora 已部署快照：`deployed/`
+- 工程文件：24 个，逐文件 SHA-256 核验一致
+- 部署文件：4 个，逐文件 SHA-256 核验一致
+
+关键部署哈希：
+
+- `window.html`: `2FA4B6A69642166E6722D359FAEC21DED104F2AE1F45E67687114AB7C45BC18F`
+- `main.js`: `03A93ABA52F836A2F45B3114A695E827F870D60ABD07C9CBBCA313277CDC4791`
+- `worker.js`: `EC341AE000DC6A72C59A578B33BDC09B6229D5A13F40936B024A885AACE42A60`
+- `renderer.wasm`: `922327EA3A77A363641D63BCA300503AD0BE4B99A41EED4A77132ADC3E6CA9E2`
+
+如需回退，请先完全退出该目录下的 Typora，再运行 `Restore.ps1`。

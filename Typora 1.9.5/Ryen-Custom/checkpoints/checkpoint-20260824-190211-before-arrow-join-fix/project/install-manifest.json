@@ -1,0 +1,15 @@
+{
+  "rendererVersion": "0.1.0",
+  "typoraVersion": "1.9.5",
+  "typoraReleaseId": "b20995f3",
+  "installedAt": "2026-08-24T18:51:35.0276695+08:00",
+  "windowPatched": true,
+  "marker": "<!-- RYEN-MERMAID-RENDERER:0.1.0 -->",
+  "windowSha256": "2FA4B6A69642166E6722D359FAEC21DED104F2AE1F45E67687114AB7C45BC18F",
+  "windowBackup": "E:\\Editor\\Typora\\Typora 1.9.5\\resources\\window.html.bak-before-ryen-mermaid",
+  "runtime": {
+    "main.js": "2DD680CD01F6932A881F2037FAD0267121B27D06218C9F7136A3E2B8E0C3A235",
+    "worker.js": "EC341AE000DC6A72C59A578B33BDC09B6229D5A13F40936B024A885AACE42A60",
+    "renderer.wasm": "A42933361BA2BA8343A2FAFBC2C93C7F4AAD7D60B599462781EB77D107C87630"
+  }
+}

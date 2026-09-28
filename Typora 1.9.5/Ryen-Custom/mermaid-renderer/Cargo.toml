@@ -1,0 +1,17 @@
+[package]
+name = "ryen-mermaid-renderer"
+version = "0.1.0"
+edition = "2024"
+description = "A fast, local-only flowchart renderer for Typora"
+license = "MIT"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+
