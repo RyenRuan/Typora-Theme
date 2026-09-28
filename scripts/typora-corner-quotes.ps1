@@ -209,7 +209,14 @@ public static class TyporaCornerQuotesHook
 
             string originalText = Clipboard.GetText(TextDataFormat.UnicodeText);
             string convertedText = ConvertChineseQuotes(originalText);
-            if (string.Equals(originalText, convertedText, StringComparison.Ordinal))
+            // Some apps (e.g. Electron-based AI clients) copy tables as a bare
+            // <thead>/<tbody> fragment without the wrapping <table> element.
+            // Chromium drops those tags on paste and the table collapses into
+            // plain text, so such fragments need a repair pass even when no
+            // quote conversion is required.
+            bool quotesChanged = !string.Equals(originalText, convertedText, StringComparison.Ordinal);
+            bool tableNeedsWrap = HtmlFragmentNeedsTableWrapper(ReadRawClipboardHtmlText());
+            if (!quotesChanged && !tableNeedsWrap)
                 return false;
 
             clipboardBeforePaste = SnapshotClipboard();
@@ -369,7 +376,7 @@ public static class TyporaCornerQuotesHook
         int startFragmentChar = ByteOffsetToCharIndex(html, startFragment);
         int endFragmentChar = ByteOffsetToCharIndex(html, endFragment);
 
-        string converted = ReplaceHtmlQuoteCharacters(html);
+        string converted = WrapBareTableFragment(ReplaceHtmlQuoteCharacters(html));
 
         // CF_HTML stores UTF-8 byte offsets in its header. Entity replacement
         // changes byte length, so rebuild those offsets before Typora pastes it.
@@ -388,6 +395,60 @@ public static class TyporaCornerQuotesHook
         }
 
         return converted;
+    }
+
+    private static readonly Regex FragmentStartRegex =
+        new Regex("<!--\\s*StartFragment\\s*-->", RegexOptions.IgnoreCase);
+    private static readonly Regex FragmentEndRegex =
+        new Regex("<!--\\s*EndFragment\\s*-->", RegexOptions.IgnoreCase);
+
+    private static bool HtmlFragmentNeedsTableWrapper(string html)
+    {
+        if (string.IsNullOrEmpty(html))
+            return false;
+        Match start = FragmentStartRegex.Match(html);
+        if (!start.Success)
+            return false;
+        Match end = FragmentEndRegex.Match(html, start.Index + start.Length);
+        if (!end.Success)
+            return false;
+        string fragment = html.Substring(start.Index + start.Length, end.Index - (start.Index + start.Length));
+        return IsBareTableFragment(fragment);
+    }
+
+    private static bool IsBareTableFragment(string fragment)
+    {
+        if (string.IsNullOrEmpty(fragment))
+            return false;
+        string trimmed = fragment.TrimStart();
+        if (trimmed.StartsWith("<table", StringComparison.OrdinalIgnoreCase))
+            return false;
+        string[] bareTags = { "<thead", "<tbody", "<tfoot", "<tr", "<td", "<th", "<caption", "<colgroup", "<col" };
+        foreach (string tag in bareTags)
+        {
+            if (trimmed.StartsWith(tag, StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+        return false;
+    }
+
+    private static string WrapBareTableFragment(string html)
+    {
+        if (string.IsNullOrEmpty(html))
+            return html;
+        Match start = FragmentStartRegex.Match(html);
+        if (!start.Success)
+            return html;
+        Match end = FragmentEndRegex.Match(html, start.Index + start.Length);
+        if (!end.Success)
+            return html;
+        int fragmentStart = start.Index + start.Length;
+        string fragment = html.Substring(fragmentStart, end.Index - fragmentStart);
+        if (!IsBareTableFragment(fragment))
+            return html;
+        return html.Substring(0, fragmentStart)
+            + "<table>" + fragment + "</table>"
+            + html.Substring(end.Index);
     }
 
     private static string ReplaceHtmlQuoteCharacters(string html)
@@ -436,6 +497,48 @@ public static class TyporaCornerQuotesHook
     {
         if (charIndex < 0 || charIndex > original.Length)
             return -1;
+
+        // Wrapping a bare table inserts bytes at the fragment boundaries.  A
+        // prefix may not contain the complete fragment, so calling
+        // WrapBareTableFragment on the truncated text would miss those bytes
+        // and make EndHTML/EndFragment point into the wrong place.  Rebuild
+        // the prefix with the same boundary insertions as the full document.
+        int fragmentStart = -1;
+        int fragmentEnd = -1;
+        Match start = FragmentStartRegex.Match(original);
+        if (start.Success)
+        {
+            Match end = FragmentEndRegex.Match(original, start.Index + start.Length);
+            if (end.Success)
+            {
+                fragmentStart = start.Index + start.Length;
+                fragmentEnd = end.Index;
+                string fragment = original.Substring(fragmentStart, fragmentEnd - fragmentStart);
+                if (IsBareTableFragment(fragment))
+                {
+                    string prefix;
+                    if (charIndex <= fragmentStart)
+                    {
+                        prefix = ReplaceHtmlQuoteCharacters(original.Substring(0, charIndex));
+                    }
+                    else if (charIndex < fragmentEnd)
+                    {
+                        prefix = ReplaceHtmlQuoteCharacters(original.Substring(0, fragmentStart))
+                            + "<table>"
+                            + ReplaceHtmlQuoteCharacters(original.Substring(fragmentStart, charIndex - fragmentStart));
+                    }
+                    else
+                    {
+                        prefix = ReplaceHtmlQuoteCharacters(original.Substring(0, fragmentStart))
+                            + "<table>"
+                            + ReplaceHtmlQuoteCharacters(original.Substring(fragmentStart, fragmentEnd - fragmentStart))
+                            + "</table>"
+                            + ReplaceHtmlQuoteCharacters(original.Substring(fragmentEnd, charIndex - fragmentEnd));
+                    }
+                    return Encoding.UTF8.GetByteCount(prefix);
+                }
+            }
+        }
 
         string convertedPrefix = ReplaceHtmlQuoteCharacters(original.Substring(0, charIndex));
         return Encoding.UTF8.GetByteCount(convertedPrefix);
